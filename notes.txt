@@ -1,0 +1,15 @@
+Install virualenv
+MAC python3 -m pip Installvirualenv
+Windows-    py -m pip install virtualenv
+-- using python i want to use the modules the onbe that i want to use us the pip and i want to unstall virualenv
+
+2. use venv to create a virtual enviorment
+Win- py -m venv venv
+
+3. we nee ti kauch the virtualenv
+
+Win - venv\Scripts\activate
+
+4. we need to install flask this is the server libaray
+
+Win - py -m pip install flask
