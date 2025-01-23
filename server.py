@@ -1,5 +1,6 @@
 from flask import Flask, request
 import json
+from config import db
 
 app = Flask(__name__)
 
@@ -27,17 +28,27 @@ def hello():
 
 products = []
 
+def fix_id(obj):
+    obj["id"] = str(obj["_id"])
+    return obj
+
 
 @app.get("/api/products")
 def get_products():
-    return json.dumps(products)
+    results = []
+    cursor = db.products.find({})
+    for prod in cursor:
+        results.append(fix_id(prod))
+
+    return json.dumps(results)
+    
 
 
 @app.post("/api/products")
 def save_product():
     product = request.get_json()
-    print(f"this is my new product {product}")
-    products.append(product)
+    db.products.insert_one(product)
+    product = fix_id(product)
     return json.dumps(product)
 
 
@@ -62,6 +73,25 @@ def delete_product(index):
         return json.dumps(deleted_product)
     else:
         return "That index does not exist"
+    
+
+@app.post("/api/coupons")
+def save_coupon():
+    coupon = request.get_json()
+    db.coupons.insert_one(coupon)
+    coupon = fix_id(coupon)
+    return json.dumps(coupon)
+
+@app.get("/api/coupons")
+def get_coupons():
+    results = []
+    cursor = db.coupons.find({})
+    for coupon in cursor:
+        results.append(fix_id(coupon))
+
+    return json.dumps(results)
+
+
 
 
 app.run(
